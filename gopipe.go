@@ -32,9 +32,9 @@ func readStdin(data chan[]byte) {
 		// Read stdin.
 		_, err := os.Stdin.Read(buf)
 		if err != nil {
-			// The producer closed the pipe, signal the consumer and die.
+			// The producer closed the pipe, close the channel and die.
 			if err.Error() == "EOF" {
-				data <- []byte{}
+				close(data)
 				break
 			}
 
@@ -54,7 +54,7 @@ func writeStdout(data chan[]byte) {
 		buf := <- data
 
 		// The producer closed the pipe, die.
-		if len(buf) == 0 {
+		if buf == nil {
 			os.Stdout.Close()
 			os.Exit(0)
 		}
