@@ -5,19 +5,15 @@ package main
 import (
 	"syscall"
 	"os"
-	"bytes"
 )
 
-// bytecopy returns a copy of a bytearray with all the null bytes removed.
-func bytecopy(array []byte) ([]byte) {
+// byteCopy() returns a copy of the byte array given.
+func byteCopy(array []byte) ([]byte) {
 	// Make a new array of the same size.
 	newArray := make([]byte, len(array))
 
 	// Copy the data.
 	copy(newArray, array)
-
-	// Remove all the null bytes.
-	newArray = bytes.Trim(newArray, "\x00")
 
 	// Return it.
 	return newArray
@@ -43,7 +39,7 @@ func readStdin(data chan[]byte) {
 		}
 
 		// Write the bytes we read to the channel.
-		data <- bytecopy(buf)
+		data <- byteCopy(buf)
 	}
 }
 
