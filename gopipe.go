@@ -3,7 +3,7 @@
 package main
 
 import (
-	"syscall"
+	"time"
 	"os"
 )
 
@@ -75,5 +75,8 @@ func main() {
 	go writeStdout(data)
 
 	// Wait forever, if we need to die one of the goroutines will do it.
-	syscall.Pause()
+	// We don't use syscall.Pause() because not all systems implement it.
+	for {
+		time.Sleep(1 * time.Second)
+	}
 }
