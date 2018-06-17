@@ -15,13 +15,13 @@ func byteCopy(array []byte) ([]byte) {
 	// Copy the data.
 	copy(newArray, array)
 
-	// Return it.
 	return newArray
 }
 
 // readStdin() reads from the producer.
 func readStdin(data chan[]byte) {
 	// Make the buffer.
+	// We use the size of a page because it results in more speed.
 	buf := make([]byte, os.Getpagesize())
 
 	for {
@@ -65,9 +65,12 @@ func writeStdout(data chan[]byte) {
 
 func main() {
 	// Make the channel.
+	// We use channels here so the consumer doesn't have to wait for all the data.
+	// Plus we get built in buffering.
+	// This is useful when streaming over the network for example.
 	data := make(chan []byte, 8096)
 
-	// Run stuff.
+	// Start reading stdin and stdout.
 	go readStdin(data)
 	go writeStdout(data)
 
